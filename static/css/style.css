@@ -1,0 +1,226 @@
+:root {
+    --background: #fcfcfd;
+    --surface: #ffffff;
+    --surface-low: #f8f9fc;
+    --surface-high: #f0f2f7;
+    --on-surface: #020617;
+    --on-surface-variant: #64748b;
+    --primary: #2563eb;
+    --primary-container: #dbeafe;
+    --font-outfit: 'Outfit', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--background);
+    color: var(--on-surface);
+    font-family: var(--font-outfit);
+    min-height: 100vh;
+    padding: 4rem 2rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 1rem;
+    color: var(--on-surface);
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: var(--on-surface-variant);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 600;
+}
+
+.input-card {
+    background: var(--surface);
+    border-radius: 40px;
+    padding: 3rem;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.03);
+    margin-bottom: 4rem;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    color: var(--on-surface-variant);
+}
+
+textarea {
+    width: 100%;
+    height: 160px;
+    background: var(--surface-low);
+    border: none;
+    border-radius: 24px;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: var(--on-surface);
+    font-family: var(--font-outfit);
+    resize: none;
+    transition: all 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    background: var(--surface-high);
+    box-shadow: 0 0 0 2px var(--primary-container);
+}
+
+.select-wrapper {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+select {
+    padding: 1.2rem 2.5rem;
+    background: var(--surface-low);
+    border: none;
+    border-radius: 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    cursor: pointer;
+    appearance: none;
+    font-family: var(--font-outfit);
+    transition: all 0.3s ease;
+}
+
+#generate-btn {
+    background: var(--on-surface);
+    color: #fff;
+    border: none;
+    padding: 1.2rem 3.5rem;
+    border-radius: 100px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#generate-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+#generate-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.storyboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2.5rem;
+    margin-top: 4rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.storyboard-grid.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.panel {
+    background: var(--surface);
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.05);
+    transition: transform 0.4s ease;
+}
+
+.panel:hover {
+    transform: scale(1.02);
+}
+
+.image-container {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--surface-high);
+    position: relative;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--surface-high);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.caption {
+    padding: 2.5rem;
+}
+
+.scene-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    background: var(--primary-container);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+}
+
+.scene-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 6rem;
+    color: var(--on-surface-variant);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}

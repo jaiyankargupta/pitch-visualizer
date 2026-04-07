@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pitch Visualizer | From Words to Storyboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <p class="subtitle">Narrative Visualization Engine</p>
+            <h1>The Pitch Visualizer</h1>
+        </header>
+
+        <main>
+            <section class="input-card">
+                <div class="form-group">
+                    <label for="narrative-input">Your Success Story / Pitch Narrative</label>
+                    <textarea id="narrative-input" placeholder="Enter a 3-5 sentence narrative and see it come to life as a visual storyboard..."></textarea>
+                </div>
+                
+                <div class="select-wrapper">
+                    <div style="flex: 1">
+                        <label>VIsual Style</label>
+                        <select id="style-select">
+                            <option value="cinematic">Cinematic Digital Art</option>
+                            <option value="watercolor">Watercolor Storybook</option>
+                            <option value="sketch">Minimalist Sketch</option>
+                            <option value="oil">Oil Painting Masterpiece</option>
+                        </select>
+                    </div>
+                    <button id="generate-btn">Generate Storyboard</button>
+                </div>
+            </section>
+
+            <section class="storyboard-grid" id="storyboard-grid">
+                <!-- Panels will be injected here -->
+            </section>
+        </main>
+
+        <footer class="footer">
+            Built for visual storytellers and sales visionaries
+        </footer>
+    </div>
+
+    <script>
+        const generateBtn = document.getElementById('generate-btn');
+        const narrativeInput = document.getElementById('narrative-input');
+        const styleSelect = document.getElementById('style-select');
+        const storyboardGrid = document.getElementById('storyboard-grid');
+
+        generateBtn.addEventListener('click', async () => {
+            const text = narrativeInput.value.trim();
+            if (!text) return;
+
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Engineering Storyboard...';
+            storyboardGrid.innerHTML = '';
+            storyboardGrid.classList.remove('visible');
+
+            const formData = new FormData();
+            formData.append('text', text);
+            formData.append('style', styleSelect.value);
+
+            try {
+                const response = await fetch('/generate-storyboard', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Generation failed');
+
+                const data = await response.json();
+
+                // Inject Panels
+                data.storyboard.forEach((panel, index) => {
+                    const panelEl = document.createElement('div');
+                    panelEl.className = 'panel';
+                    panelEl.style.animationDelay = `${index * 0.2}s`;
+                    
+                    panelEl.innerHTML = `
+                        <div class="image-container">
+                            <div class="loader"></div>
+                            <img src="${panel.image_url}" alt="Scene ${panel.scene_number}">
+                        </div>
+                        <div class="caption">
+                            <span class="scene-tag">Scene ${panel.scene_number}</span>
+                            <p class="scene-text">${panel.text}</p>
+                        </div>
+                    `;
+                    
+                    storyboardGrid.appendChild(panelEl);
+
+                    // Fade in image when loaded
+                    const img = panelEl.querySelector('img');
+                    const loader = panelEl.querySelector('.loader');
+                    img.onload = () => {
+                        loader.style.display = 'none';
+                        img.style.display = 'block';
+                    };
+                });
+
+                storyboardGrid.classList.add('visible');
+                generateBtn.textContent = 'Generate Storyboard';
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred during generation.');
+                generateBtn.textContent = 'Generate Storyboard';
+            } finally {
+                generateBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
