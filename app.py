@@ -14,16 +14,24 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
 
-os.makedirs(STATIC_DIR, exist_ok=True)
-os.makedirs(TEMPLATES_DIR, exist_ok=True)
+try:
+    os.makedirs(STATIC_DIR, exist_ok=True)
+    os.makedirs(TEMPLATES_DIR, exist_ok=True)
+except OSError:
+    pass  # Read-only filesystem on Vercel serverless
 
-# Mount static files
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+# Mount static files (may not be available in serverless)
+try:
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+except Exception:
+    pass
 
-# Templates
-# Bypassing Starlette's Jinja2Templates due to an 'unhashable dict' bug in certain environments
-with open(os.path.join(TEMPLATES_DIR, "index.html"), "r") as f:
-    INDEX_HTML = f.read()
+# Load HTML template
+try:
+    with open(os.path.join(TEMPLATES_DIR, "index.html"), "r") as f:
+        INDEX_HTML = f.read()
+except FileNotFoundError:
+    INDEX_HTML = "<h1>The Pitch Visualizer</h1><p>Template not found.</p>"
 
 # Style Modifiers for "Supercharger" Prompt Engineering
 STYLE_MODIFIERS = {
